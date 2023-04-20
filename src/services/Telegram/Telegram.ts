@@ -1,45 +1,48 @@
-import {createTelegramBotClient} from '@/utils/createTelegramBotClient';
 import {logger} from '@/utils/logger';
 import {restrictUsers} from '@/utils/restrictUsers';
 import {message} from 'telegraf/filters';
+import {ExternalApi} from '../ExternalApi/ExternalApi';
+import {tokenFromProcess} from '@/utils/tokenFromProcess';
+import {Telegraf} from 'telegraf';
 
-export class Telegram {
-  private bot: BotInstance;
-
+export class Telegram extends ExternalApi<BotInstance> {
   constructor() {
-    this.bot = createTelegramBotClient();
-
+    super(tokenFromProcess('TELEGRAM_BOT_TOKEN'));
     this.enableGracefulShutdown();
   }
 
+  public async createApi() {
+    return new Telegraf(this.token);
+  }
+
   public start() {
-    this.bot.launch();
+    this.api.launch();
   }
 
   public stop(signal?: string) {
-    this.bot.stop(signal);
+    this.api.stop(signal);
   }
 
   public onMessage(fn: (ctx: BotOnMessageContext) => void) {
-    this.bot.on(message('text'), restrictUsers, fn as any);
+    this.api.on(message('text'), restrictUsers, fn as any);
   }
 
   public onCommand(
     command: string | RegExp,
     fn: (ctx: BotOnMessageContext) => void
   ) {
-    this.bot.command(command, restrictUsers, fn as any);
+    this.api.command(command, restrictUsers, fn as any);
   }
 
   public onAction(
     action: string | RegExp,
     fn: (ctx: BotOnMessageContext) => void
   ) {
-    this.bot.action(action, restrictUsers, fn as any);
+    this.api.action(action, restrictUsers, fn as any);
   }
 
   public onStart(fn: (ctx: BotOnMessageContext) => void) {
-    this.bot.start(restrictUsers, fn as any);
+    this.api.start(restrictUsers, fn as any);
   }
 
   public onQuit(fn: (ctx: BotOnMessageContext) => void) {
@@ -51,15 +54,11 @@ export class Telegram {
   }
 
   public onSettings(fn: (ctx: BotOnMessageContext) => void) {
-    this.bot.settings(restrictUsers, fn as any);
-  }
-
-  public getBotInstance() {
-    return this.bot;
+    this.api.settings(restrictUsers, fn as any);
   }
 
   private enableGracefulShutdown() {
-    const bot = this.getBotInstance();
+    const bot = this.api;
     // Enable graceful stop
     process.once('SIGINT', (e) => {
       logger.error('SIGINT', e);

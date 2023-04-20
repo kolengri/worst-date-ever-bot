@@ -1,0 +1,1 @@
+export {tokenFromProcess} from './tokenFromProcess';
