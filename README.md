@@ -33,7 +33,7 @@ OPENAI_API_KEY=<your-openai-api-key>
 # Allowed users should be separated by comma.
 # Example: "[1234,3221]"
 # Find your ID is possible via the Telegram bot @myidbot
-ALLOWED_USER_IDS = "[<list-of-allowed-users>]"
+ALLOWED_USER_IDS = "<list-of-allowed-users>"
 ```
 
 Once you have set up your environment variables, run the following command to start the bot:

@@ -1,0 +1,51 @@
+{
+  "name": "gpt-translator-bot",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Grigoriy Kolenko",
+  "description": "Telegram bot that translates text using GPT-3",
+  "main": "index.ts",
+  "scripts": {
+    "lint": "echo 'No linting configured'",
+    "start": "cross-env NODE_ENV=development tsnd -r tsconfig-paths/register --inspect --respawn -T --cls --ignore-watch node_modules index.ts",
+    "start:prod": "cross-env NODE_ENV=production ts-node -r tsconfig-paths/register -T index.ts",
+    "coverage": "jest --coverage",
+    "test": "jest",
+    "test:watch": "jest --watch --coverage",
+    "docker:build": "docker build -t gpt-translator-bot .",
+    "docker:run": "docker run -p 8000:8000 gpt-translator-bot",
+    "docker:up": "docker-compose up -d"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "dts lint"
+    }
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=12"
+  },
+  "devDependencies": {
+    "@types/node@*": "^18.15.12",
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@types/jest": "^29.5.0",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "size-limit": "^8.2.4",
+    "ts-jest": "^29.1.0",
+    "ts-node-dev": "^2.0.0",
+    "tslib": "^2.5.0",
+    "typegram": "^5.0.0",
+    "typescript": "^5.0.3"
+  },
+  "dependencies": {
+    "@tsconfig/recommended": "^1.0.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "openai": "^3.2.1",
+    "telegraf": "^4.12.2",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "winston": "^3.8.2"
+  }
+}
