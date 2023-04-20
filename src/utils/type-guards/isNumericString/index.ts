@@ -1,0 +1,1 @@
+export {isNumericString} from './isNumericString'
