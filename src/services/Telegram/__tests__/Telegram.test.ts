@@ -6,7 +6,7 @@ jest.mock('@/utils/tokenFromProcess', () => ({
   tokenFromProcess: jest.fn(),
 }));
 
-describe('Telegram', () => {
+describe(Telegram.name, () => {
   let telegram: Telegram;
   const botToken = 'BOT_TOKEN';
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('Telegram', () => {
 
   describe('start', () => {
     it('should call the launch method on the api', () => {
-      const launchSpy = jest.spyOn(Telegram.prototype.api, 'launch');
+      const launchSpy = jest.spyOn(telegram.api, 'launch');
 
       telegram.start();
 
@@ -39,7 +39,7 @@ describe('Telegram', () => {
 
   describe('stop', () => {
     it('should call the stop method on the api', () => {
-      const stopSpy = jest.spyOn(Telegram.prototype.api, 'stop');
+      const stopSpy = jest.spyOn(telegram.api, 'stop');
 
       telegram.stop();
 
@@ -49,7 +49,7 @@ describe('Telegram', () => {
 
   describe('onMessage', () => {
     it('should call the on method on the api with the message filter, restrictUsers middleware, and the provided function', () => {
-      const onSpy = jest.spyOn(Telegram.prototype.api, 'on');
+      const onSpy = jest.spyOn(telegram.api, 'on');
 
       const fn = () => {};
 
@@ -61,7 +61,7 @@ describe('Telegram', () => {
 
   describe('onCommand', () => {
     it('should call the command method on the api with the provided command, restrictUsers middleware, and the provided function', () => {
-      const commandSpy = jest.spyOn(Telegram.prototype.api, 'command');
+      const commandSpy = jest.spyOn(telegram.api, 'command');
 
       const fn = () => {};
 
@@ -73,7 +73,7 @@ describe('Telegram', () => {
 
   describe('onAction', () => {
     it('should call the action method on the api with the provided action, restrictUsers middleware, and the provided function', () => {
-      const actionSpy = jest.spyOn(Telegram.prototype.api, 'action');
+      const actionSpy = jest.spyOn(telegram.api, 'action');
 
       const fn = () => {};
 
@@ -85,7 +85,7 @@ describe('Telegram', () => {
 
   describe('onStart', () => {
     it('should call the start method on the api with restrictUsers middleware and the provided function', () => {
-      const startSpy = jest.spyOn(Telegram.prototype.api, 'start');
+      const startSpy = jest.spyOn(telegram.api, 'start');
 
       const fn = () => {};
 
@@ -97,7 +97,7 @@ describe('Telegram', () => {
 
   describe('onQuit', () => {
     it('should call the onCommand method with "quit" and the provided function', () => {
-      const onCommandSpy = jest.spyOn(Telegram.prototype, 'onCommand');
+      const onCommandSpy = jest.spyOn(telegram, 'onCommand');
 
       const fn = () => {};
 
@@ -109,7 +109,7 @@ describe('Telegram', () => {
 
   describe('onHelp', () => {
     it('should call the onCommand method with "help" and the provided function', () => {
-      const onCommandSpy = jest.spyOn(Telegram.prototype, 'onCommand');
+      const onCommandSpy = jest.spyOn(telegram, 'onCommand');
 
       const fn = () => {};
 
@@ -121,7 +121,7 @@ describe('Telegram', () => {
 
   describe('onSettings', () => {
     it('should call the settings method on the api with restrictUsers middleware and the provided function', () => {
-      const settingsSpy = jest.spyOn(Telegram.prototype.api, 'settings');
+      const settingsSpy = jest.spyOn(telegram.api, 'settings');
 
       const fn = () => {};
 
