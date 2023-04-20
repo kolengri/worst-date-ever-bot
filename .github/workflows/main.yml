@@ -1,0 +1,75 @@
+# name: Deploy to server
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   workflow_dispatch:
+
+# env:
+#   ENV_TELEGRAM_BOT_TOKEN: ${{ secrets.ENV_TELEGRAM_BOT_TOKEN }}
+#   ENV_OPENAI_API_KEY: ${{ secrets.ENV_OPENAI_API_KEY }}
+#   ENV_ALLOWED_USER_IDS: ${{ secrets.ENV_ALLOWED_USER_IDS }}
+#   IMAGE_TAG: ${{ secrets.DOCKER_USERNAME }}/worst-date-ever-bot:latest
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install dependencies
+#         run: yarn install
+
+#       - name: Run Jest tests
+#         run: yarn test --ci --collectCoverage=false
+
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v1
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
+
+#       - name: Set up Docker Buildx
+#         id: buildx
+#         uses: docker/setup-buildx-action@v1
+
+#       - name: Build and push Docker image
+#         id: docker_build
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: .
+#           file: ./Dockerfile
+#           builder: ${{ steps.buildx.outputs.name }}
+#           push: true
+#           tags: ${{ env.IMAGE_TAG }}
+
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Install SSH key
+#         uses: shimataro/ssh-key-action@v2
+#         with:
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           known_hosts: /ssh/known_hosts
+
+#       - name: Deploy to server
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.SERVER_IP }}
+#           username: ${{ secrets.SERVER_USERNAME }}
+#           port: 22
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           script: |
+#             docker stop worst-date-ever-bot || true
+#             docker rm worst-date-ever-bot || true
+#             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+#             docker pull ${{ env.IMAGE_TAG }}
+#             docker run -d --restart always \
+#               --name worst-date-ever-bot \
+#               -e TELEGRAM_BOT_TOKEN=${{ secrets.ENV_TELEGRAM_BOT_TOKEN }} \
+#               -e OPENAI_API_KEY=${{ secrets.ENV_OPENAI_API_KEY }} \
+#               -e ALLOWED_USER_IDS="${{ secrets.ENV_ALLOWED_USER_IDS }}" \
+#               ${{ env.IMAGE_TAG }}
