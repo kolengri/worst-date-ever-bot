@@ -1,0 +1,1 @@
+export {onQuit} from './onQuit';

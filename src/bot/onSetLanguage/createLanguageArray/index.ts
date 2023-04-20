@@ -1,0 +1,1 @@
+export {createLanguageArray} from './createLanguageArray';
