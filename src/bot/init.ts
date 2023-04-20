@@ -2,7 +2,7 @@ import {logger} from '@/utils/logger';
 import {onStart} from './onStart';
 import {onQuit} from './onQuit';
 import {onMessage} from './onMessage';
-import {Telegram} from '@/Telegram/Telegram';
+import {Telegram} from '@/services/Telegram';
 
 export const init = async () => {
   try {

@@ -1,4 +1,4 @@
-import {OpenAI} from '@/OpenAI';
+import {OpenAI} from '@/services/OpenAI';
 import {logger} from '@/utils/logger';
 import {
   ChatCompletionRequestMessage,
@@ -31,16 +31,18 @@ export const onMessage = async (ctx: BotOnMessageContext) => {
   try {
     ctx.sendChatAction('typing');
     logger.info('AI request started', {meta: text});
+
     const completions = await ai.complete({
       content: text,
       role: 'user',
     });
 
     logger.info('AI request finished', {meta: completions.data});
+
     const message = completions.data.choices[0].message;
 
     if (!message) {
-      logger.info('AI request failed - no text in response', {
+      logger.error('AI request failed - no text in response', {
         meta: completions.data,
       });
       return;
@@ -50,6 +52,6 @@ export const onMessage = async (ctx: BotOnMessageContext) => {
     await ctx.reply(message.content);
     logger.info('Bot message sent', {meta: message.content});
   } catch (error) {
-    logger.info('AI request failed -', error);
+    logger.error('AI request failed -', error);
   }
 };
